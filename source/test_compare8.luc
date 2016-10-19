@@ -1,0 +1,64 @@
+module test_compare8 (
+    input clk,  // clock
+    input rst,  // reset
+    output out
+  ) {
+  
+  dff counter[27](.clk(clk),.rst(rst));
+  sig cases[3];
+  
+  adder8 add;
+  compare8 compare;
+  
+  
+  always {
+  add.a = 8b0;
+  add.b = 8b0;
+  add.alufn = 1b0;
+  
+  compare.z = add.z;
+  compare.v = add.v;
+  compare.n = add.n;
+  compare.alufn = 2b00;
+  
+  
+ 
+  cases = counter.q[26:24];
+  counter.d = counter.q + 1;
+    
+    case(cases) {
+      //testing a = b when ALUFN is 01
+      3b000:
+        add.a = 8b00000001; // a = 1
+        add.b = 8b00000001; // b = 1
+        compare.alufn = 2b01;
+        out = (compare.out == 8b00000001); //showing 1 cause we definded them to be the same
+        
+      //testing a < b when ALUFN is 10  
+      3b001:
+        add.a = 8b00000001;
+        add.b = 8b00000011;
+        compare.alufn = 2b10;
+        out = (compare.out == 8b00000001); //shows 1 cause we defined A > B)
+        
+      //testing a >= b when ALUFN is 11 
+      3b010:
+        add.a = 8b00000001;
+        add.b = 8b00000011;
+        compare.alufn = 2b11;
+        out = (compare.out == 8b00000001);
+        
+      //making A = B when ALUFN is 11
+      3b100:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        compare.alufn = 2b11;
+        out = (compare.out == 8b00000001);
+        
+      default:
+        out  = 0;  
+    }
+        
+       
+  }
+}
