@@ -26,6 +26,11 @@ module mojo_top (
     reset_conditioner reset_cond;
   }
   
+  adder8 add;
+  boole8 bool;
+  compare8 cmp;
+  shift8 shift;
+    
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
     rst = reset_cond.out;   // conditioned reset
@@ -38,5 +43,37 @@ module mojo_top (
     io_led = 3x{{8h00}};    // turn LEDs off
     io_seg = 8hff;          // turn segments off
     io_sel = 4hf;           // select no digits
+    
+    // adder8
+    add.a = io_dip[0];
+    add.b = io_dip[1];
+    add.alufn = io_dip[2][0];
+    
+    // boole8
+    bool.a = io_dip[0];
+    bool.b = io_dip[1];
+    bool.alufn = io_dip[2][3:0];
+    
+    // compare8
+    cmp.z = add.z;
+    cmp.v = add.v;
+    cmp.n = add.n;
+    cmp.alufn = io_dip[2][1:0];
+    
+    // shift8
+    shift.a = io_dip[0];
+    shift.b = io_dip[1][2:0];
+    shift.alufn = io_dip[2][1:0];
+    
+    case(io_dip[2][5:4]) {
+      2b00: // adder
+        io_led[2] = add.out;
+      2b01: // boole
+        io_led[2] = bool.out;
+      2b10: // shifter
+        io_led[2] = shift.out;
+      2b11: // compare
+        io_led[2] = cmp.out;
+    }
   }
 }
