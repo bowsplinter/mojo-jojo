@@ -1,0 +1,63 @@
+module test_adder8 (
+    input clk,  // clock
+    input rst,  // reset
+    output out
+  ) {
+
+  dff counter[27](.clk(clk), .rst(rst));
+  sig cases[3];
+  
+  adder8 add;
+  
+  always {
+  add.a = 8b0;
+  add.b = 8b0;
+  add.alufn = 1b0;
+  cases = counter.q[26:24];
+  counter.d = counter.q +1;
+    case(cases){
+      3b000:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      3b001:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      3b010:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      3b011:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000011);
+      3b100:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      3b101:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);  
+      3b110:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      3b111:
+        add.a = 8b00000001;
+        add.b = 8b00000001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00000010);
+      default:
+        out = 0;
+    }
+  }
+}
