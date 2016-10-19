@@ -1,0 +1,34 @@
+/*
+   8-bit adder
+   input: a[7-0], b[7-0], alufn[0]
+   output: out[7-0], z, v, n
+   out[7-0]:
+     alufn[0] = 0: takes inputs a and b and adds them together
+     alufn[0] = 1: takes input b and subtracts from input a
+   z: 1 if out[7-0] is all 0
+   v: 1 if overflow 8bits
+   n: 1 if negative
+*/
+module adder8 (
+    input a[8],
+    input b[8],
+    input alufn, // alufn[0] decides addition or subtraction
+    output ao[8],
+    output z,    // zero
+    output v,    // overflow
+    output n,    // negative
+    output out[8]
+  ) {
+  sig sum[8];
+  sig xB[8];
+
+  always {  
+    ao = a;
+    xB = b ^ 8x{alufn};  // inverts B if doing subtraction
+    sum = a + xB + alufn;  // adds 0b1 if negative
+    z = ~|sum;  // bitwise nor gate on each digit of sum, 1 if all 0
+    v = (a[7] & xB[7] & ~sum[7]) | (~a[7] & ~xB[7] & sum[7]);  // only if ++ or --
+    n = sum[7];  // sign-bit held by most significant digit
+    out = sum;
+  }
+}
