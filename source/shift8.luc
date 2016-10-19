@@ -1,0 +1,20 @@
+module shift8 (
+    input a[8],
+    input b[3],   // 3 bits required to shift by maximum 8 bits
+    input alufn[2],  // ALUFN[1:0]
+    output out[8]
+  ) {
+
+  always {
+    case(alufn) {
+      2b00:  // shift left
+        out = a << b;  
+      2b01:  // shift right
+        out = a >> b;
+      2b11:  // shift right with sign
+        out = $signed(a) >>> b;
+      default:
+        out = a << b;
+    }
+  }
+}
