@@ -23,14 +23,14 @@ module compare8 (
     lessequal = z|(n^v); // condition for equal + condition for less
     
     case(alufn) {
-    2b01:
-      out = c{7b0, z};
-    2b10:
-      out = c{7b0, less};
-    2b11:
-      out = c{7b0, lessequal};
-    default:
-      out = c{7b0, z};
+      2b01:
+        out = c{7b0, z};
+      2b10:
+        out = c{7b0, less};
+      2b11:
+        out = c{7b0, lessequal};
+      default:
+        out = c{7b0, z};
     }
   }
 }
