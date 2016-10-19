@@ -4,8 +4,8 @@ module test_adder8 (
     output out
   ) {
 
-  dff counter[27](.clk(clk), .rst(rst));
-  sig cases[3];
+  dff counter[28](.clk(clk), .rst(rst));
+  sig cases[4];
   
   adder8 add;
   
@@ -13,49 +13,54 @@ module test_adder8 (
   add.a = 8b0;
   add.b = 8b0;
   add.alufn = 1b0;
-  cases = counter.q[26:24];
+  cases = counter.q[27:24];
   counter.d = counter.q +1;
     case(cases){
-      3b000:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
+      4b0000:
+        add.a = 8b11111000;
+        add.b = 8b10100010;
         add.alufn = 1b0;
-        out = (add.out == 8b00000010);
-      3b001:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
+        out = (add.out == 8b10011010);
+      4b0001:
+        add.a = 8b00000101;
+        add.b = 8b00101101;
+        add.alufn = 1b1;
+        out = (add.out == 8b11011000);
+      4b0010:
+        add.a = 8b00110011;
+        add.b = 8b00000010;
         add.alufn = 1b0;
-        out = (add.out == 8b00000010);
-      3b010:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
+        out = (add.out == 8b00110101);
+      4b0011:
+        add.a = 8b11010010;
+        add.b = 8b11000111;
+        add.alufn = 1b1;
+        out = (add.out == 8b00001011);
+      4b0100:
+        add.a = 8b11010001;
+        add.b = 8b01001001;
         add.alufn = 1b0;
-        out = (add.out == 8b00000010);
-      3b011:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
+        out = (add.out == 8b00011010);
+      4b0101:
+        add.a = 8b01111111;
+        add.b = 8b01111111;
         add.alufn = 1b0;
-        out = (add.out == 8b00000011);
-      3b100:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
+        out = (add.out == 8b11111110);  
+      4b0110:
+        add.a = 8b11111111;
+        add.b = 8b11111111;
         add.alufn = 1b0;
-        out = (add.out == 8b00000010);
-      3b101:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
-        add.alufn = 1b0;
-        out = (add.out == 8b00000010);  
-      3b110:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
-        add.alufn = 1b0;
-        out = (add.out == 8b00000010);
-      3b111:
-        add.a = 8b00000001;
-        add.b = 8b00000001;
-        add.alufn = 1b0;
-        out = (add.out == 8b00000010);
+        out = (add.out == 8b00000000);
+      4b0111:
+        add.a = 8b00000000;
+        add.b = 8b00000000;
+        add.alufn = 1b1;
+        out = (add.out == 8b00000000);
+      4b1000:
+        add.a = 8b10000000;
+        add.b = 8b10000000;
+        add.alufn = 1b1;
+        out = (add.out == 8b00000000);
       default:
         out = 0;
     }
