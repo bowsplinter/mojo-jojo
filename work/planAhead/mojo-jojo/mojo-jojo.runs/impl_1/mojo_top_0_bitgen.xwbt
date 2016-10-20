@@ -1,8 +1,0 @@
-INTSTYLE=pa
-INFILE=C:\Users\Vivek\personal\SUTD\istd\50.002 computation structures\mojo-jojo\work\planAhead\mojo-jojo\mojo-jojo.runs\impl_1\mojo_top_0_routed.ncd
-OUTFILE=C:\Users\Vivek\personal\SUTD\istd\50.002 computation structures\mojo-jojo\work\planAhead\mojo-jojo\mojo-jojo.runs\impl_1\mojo_top_0.bit
-FAMILY=Spartan6
-PART=xc6slx9-2tqg144
-WORKINGDIR=C:\Users\Vivek\personal\SUTD\istd\50.002 computation structures\mojo-jojo\work\planAhead\mojo-jojo\mojo-jojo.runs\impl_1
-LICENSE=WebPack
-USER_INFO=211249454_0_0_538
