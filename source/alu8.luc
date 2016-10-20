@@ -9,6 +9,7 @@ module alu8 (
   boole8 bool;
   compare8 cmp;
   shift8 shift;
+  multiplier8 mul;
   
   always {
     
@@ -16,6 +17,11 @@ module alu8 (
     add.a = a;
     add.b = b;
     add.alufn = alufn[0];
+    
+    // multiplier8
+    mul.a = a;
+    mul.b = b;
+    mul.alufn = alufn[0];
     
     // boole8
     bool.a = a;
@@ -35,7 +41,12 @@ module alu8 (
     
     case(alufn[5:4]) {
       2b00: // adder
-        out = add.out;
+        if (alufn[1]) {
+          out = mul.out;
+        }
+        else {
+          out = add.out;
+        }
       2b01: // boole
         out = bool.out;
       2b10: // shifter

@@ -1,0 +1,16 @@
+module multiplier8 (
+    input a[8],
+    input b[8],
+    input alufn,  // ALUFN[0]
+    output out[8]
+  ) {
+
+  always {
+    if (~alufn) {
+      out = a*b;
+    }
+    else {
+      out = a/b;
+    }
+  }
+}
