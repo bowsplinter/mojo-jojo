@@ -1,9 +1,9 @@
 module test_adder8 (
     input clk,  // clock
     input rst,  // reset
-    output out,
-    output done,
-    output test_no
+    output out, // Used to determine if test passes of fails
+    output done, // Used to determine if testing has been completed
+    output test_no // Used to identify which test case is being carried out
   ) {
 /*A counter for us to change our test cases
   It has 30 bits to give the circuit time to change cases
@@ -19,7 +19,9 @@ module test_adder8 (
   add.a = 8b0; // Initialising input a to adder to be 8 bits
   add.b = 8b0; // Initialising input b to adder to be 8 bits
   add.alufn = 1b0; // Initialising input alufn to adder to be 1 bit
+  
   // Illustration of the uses of a,b and alufn will be done in Test case 1
+ 
   cases = counter.q[27:24]; 
   /* This allows the changing of the cases
      by reading the 24th to 27th bit of the clk
@@ -49,7 +51,7 @@ module test_adder8 (
            In this case it is set to addition
            If alufn is set to 1, operation is set to subtraction
         */
-        out = (add.out == 8b10011010);
+        out = (add.out == 8b10011010); // Checking if output from adder8 is correct
         test_no = 4b0000;
       4b0001:
       /*
