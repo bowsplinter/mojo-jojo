@@ -78,7 +78,7 @@ module finitestatemachine (
         }
       state.BOOL:
         out = test_bool.out;
-        test_no = test_bool.test_no;
+        test_no = 0; // remove or change later
         io_led[0][4] = 1;
         if (test_bool.done) {
           state.d = state.IDLE;
