@@ -30,6 +30,8 @@ module mojo_top (
   }
   
   alu8 alu;
+  
+  
     
   always {
     reset_cond.in = ~rst_n; // input raw inverted reset signal
@@ -49,7 +51,7 @@ module mojo_top (
     alu.b = io_dip[1];
     alu.alufn = io_dip[2][5:0];
     io_led[2] = alu.out;
-
+ 
     statemachine.io_button = io_button;
     if (statemachine.out == 1) {
       io_led[1] = 1;
@@ -57,8 +59,9 @@ module mojo_top (
     else if (statemachine.out == 0){
       io_led[2] = 1;
     }
-    io_led[1] = statemachine.out;
+    io_led[0][7:2] = statemachine.test_no;
     io_led[0][0] = statemachine.io_led[0][0];
     io_led[0][1] = statemachine.io_led[0][1];
+
   }
 }

@@ -1,0 +1,17 @@
+module switch (
+    input toggle,
+    input clk,
+    input rst,
+    output out
+  ) {
+
+  .clk(clk){
+    edge_detector edge_detector(#RISE(0), #FALL(1));
+    button_conditioner button_cond;
+  }
+  always {
+    button_cond.in = toggle;
+    edge_detector.in = button_cond.out;
+    out = edge_detector.out;
+  }
+}
