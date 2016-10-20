@@ -62,7 +62,6 @@ module test_adder8 (
         add.alufn = 1b0;
         out = (add.out == 8b11111110);
         test_no = 4b0110;
-        out = (add.out == 8b00000000);
       4b0111:
         add.a = 8b00000000;
         add.b = 8b00000000;

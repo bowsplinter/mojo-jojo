@@ -10,6 +10,9 @@ module finitestatemachine (
   .clk(clk) {
     .rst(rst) {
       test_adder8 test_add;
+      test_boole8 test_bool;
+      test_compare8 test_cmp;
+      test_shift8 test_shift;
       
       switch btnUp;
       
@@ -39,6 +42,8 @@ module finitestatemachine (
         if (test_add.done == 1) {
           state.d = state.IDLE;
         }
+      state.CMP:
+        out = test_cmp.out;
     }
   }
 }
