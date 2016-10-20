@@ -3,12 +3,17 @@ module finitestatemachine (
     input rst,  // reset
     input io_button[5],
     output out,
-    output test_no,
+    output test_no[4],
+    output io_seg[8],
+    output io_sel[4],
     output io_led[3][8]
   ) {
 
   .clk(clk) {
     .rst(rst) {
+    
+      multi_seven_seg seg;
+      
       test_adder8 test_add;
       test_boole8 test_bool;
       test_compare8 test_cmp;
@@ -36,8 +41,15 @@ module finitestatemachine (
     io_led = 3x{{8h00}};
     out = 2;
     test_no = 0;
+    
+    // seg
+    seg.values = {5d10,5d10,5d10,5d10};
+    io_seg = ~seg.seg;
+    io_sel = ~seg.sel;
+    
     case (state.q) {
       state.IDLE:
+        seg.values = {5d11,5d18,5d24,5d10};  // ALU
         out = 2;
         if (btnUp.out) {
           state.d = state.ADD;
@@ -56,6 +68,12 @@ module finitestatemachine (
         }
         
       state.ADD:
+        if (test_add.out) {
+          seg.values = {5d11,5d14,5d14,5d1};  // Add
+        }
+        else {
+          seg.values = {5d11,5d14,5d14,5d0};
+        }
         out = test_add.out;
         test_no = test_add.test_no;
         io_led[0][1]=1;
@@ -63,6 +81,12 @@ module finitestatemachine (
           state.d = state.IDLE;
         }
       state.CMP:
+        if (test_cmp.out) {
+          seg.values = {5d13,5d21,5d15,5d1};  // CPE
+        }
+        else {
+          seg.values = {5d13,5d21,5d15,5d0};
+        }
         out = test_cmp.out;
         test_no = test_cmp.test_no;
         io_led[0][2] = 1;
@@ -70,6 +94,12 @@ module finitestatemachine (
           state.d = state.IDLE;
         }
       state.SHIFT:
+        if (test_cmp.out) {
+          seg.values = {5d23,5d17,5d16,5d1};  // SHF
+        }
+        else {
+          seg.values = {5d23,5d17,5d16,5d0};
+        }
         out = test_shift.out;
         test_no = test_shift.test_no;
         io_led[0][3] = 1;
@@ -77,8 +107,14 @@ module finitestatemachine (
           state.d = state.IDLE;
         }
       state.BOOL:
+        if (test_cmp.out) {
+          seg.values = {5d12,5d20,5d20,5d1}; // bOOL
+        }
+        else {
+          seg.values = {5d12,5d20,5d20,5d0};
+        }
         out = test_bool.out;
-        test_no = 0; // remove or change later
+        test_no = test_bool.testcase; // remove or change later
         io_led[0][4] = 1;
         if (test_bool.done) {
           state.d = state.IDLE;
