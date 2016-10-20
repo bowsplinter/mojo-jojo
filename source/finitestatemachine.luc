@@ -34,10 +34,19 @@ module finitestatemachine (
         
     state.d = state.q;
     io_led = 3x{{8h00}};
-    out = 2;
-    test_no = 0;
+    out = 2; 
+    test_no = 0; // This shows the testNumber that is being run for each tester Module
     case (state.q) {
       state.IDLE:
+      /*
+        This State waits for input from the 5 buttons on IO shield
+        to decide which test to carry out 
+           Up - test Adder Module
+           Center - test Comparator Module
+           Down - test Shifter Module
+           Left - test Boolean Module
+           Right - Showcase Faulty module for error detection
+      */
         out = 2;
         if (btnUp.out) {
           state.d = state.ADD;
@@ -56,13 +65,25 @@ module finitestatemachine (
         }
         
       state.ADD:
+      /*
+        This state tests the Adder module
+        It will run through all the test cases in test_adder8
+        before it comes to a stop, and returns to the IDLE state
+        where further testing can be carried out.
+      */
         out = test_add.out;
         test_no = test_add.test_no;
         io_led[0][1]=1;
-        if (test_add.done == 1) {
+        if (test_add.done == 1) { //checking if testing is done 
           state.d = state.IDLE;
         }
       state.CMP:
+      /*
+        This state tests the Comparator module
+        It will run through all the test cases in test_compare8
+        before it comes to a stop, and returns to the IDLE state
+        where further testing can be carried out.
+      */
         out = test_cmp.out;
         test_no = test_cmp.test_no;
         io_led[0][2] = 1;
@@ -70,6 +91,12 @@ module finitestatemachine (
           state.d = state.IDLE;
         }
       state.SHIFT:
+      /*
+        This state tests the Shifter module
+        It will run through all the test cases in test_shift8
+        before it comes to a stop, and returns to the IDLE state
+        where further testing can be carried out.
+      */
         out = test_shift.out;
         test_no = test_shift.test_no;
         io_led[0][3] = 1;
@@ -77,6 +104,12 @@ module finitestatemachine (
           state.d = state.IDLE;
         }
       state.BOOL:
+      /*
+        This state tests the Boolean module
+        It will run through all the test cases in test_boole8
+        before it comes to a stop, and returns to the IDLE state
+        where further testing can be carried out.
+      */
         out = test_bool.out;
         test_no = 0; // remove or change later
         io_led[0][4] = 1;
