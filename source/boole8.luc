@@ -34,11 +34,11 @@ module boole8 (
         out = ~(a^b);  
       4b1010: // A
         out = a;
-      4b1011: // A <= B, not (A=0, B=1)
+      4b1011: // B <= A
         out = a|~b;
       4b1100: // B
         out = b;
-      4b1101: // B <= A, not (A=1, B=0)
+      4b1101: // A <= B
         out = ~a|b;
       4b1110: // OR
         out = a|b;
