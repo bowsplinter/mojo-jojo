@@ -12,6 +12,7 @@ module finitestatemachine (
     test_boole8 test_bool;
     test_compare8 test_cmp;
     test_shift8 test_shift;
+    test_faulty_adder8 test_fadd;
     .rst(rst) {
     
       multi_seven_seg seg;
@@ -31,6 +32,7 @@ module finitestatemachine (
     test_bool.rst = 0;
     test_cmp.rst = 0;
     test_shift.rst = 0;
+    test_fadd.rst = 0;
     
     btnUp.toggle = io_button[0];
     btnCen.toggle = io_button[1];
@@ -75,6 +77,7 @@ module finitestatemachine (
           state.d = state.BOOL;
         }
         if (btnRight.out) {
+          test_fadd.rst = 1;
           state.d = state.FAULTY;
         }
         
@@ -143,9 +146,19 @@ module finitestatemachine (
         before it comes to a stop, and returns to the IDLE state
         where further testing can be carried out.
       */
-        // test_no = test_bool.testcase; // remove or change later
         test_no = test_bool.test_no;
         if (test_bool.done) {
+          state.d = state.IDLE;
+        }
+      state.FAULTY:
+        if (test_fadd.out) {
+          seg.values = {5d11,5d14,5d14,5d1}; // Add1
+        }
+        else {
+          seg.values = {5d11,5d14,5d14,5d0}; // Add0
+        }
+        test_no = test_fadd.test_no;
+        if (test_fadd.done) {
           state.d = state.IDLE;
         }
     }

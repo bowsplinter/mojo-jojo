@@ -1,0 +1,23 @@
+module faulty_adder8 (
+    input a[8],
+    input b[8],
+    input alufn, // alufn[0] decides addition or subtraction
+    output ao[8],
+    output z,    // zero
+    output v,    // overflow
+    output n,    // negative
+    output out[8]
+  ) {
+  sig sum[8];
+  sig xB[8];
+
+  always {  
+    ao = a;
+    xB = b ^ 8x{alufn};  // inverts B if doing subtraction
+    sum = a;  //!!!! FAULTY SUM !!!!
+    z = ~|sum;  // bitwise nor gate on each digit of sum, 1 if all 0
+    v = (a[7] & xB[7] & ~sum[7]) | (~a[7] & ~xB[7] & sum[7]);  // only if ++ or --
+    n = sum[7];  // sign-bit held by most significant digit
+    out = sum;
+  }
+}

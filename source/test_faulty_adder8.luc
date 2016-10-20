@@ -1,0 +1,163 @@
+module test_faulty_adder8 (
+    input clk,  // clock
+    input rst,  // reset
+    output out, // Used to determine if test passes of fails
+    output done, // Used to determine if testing has been completed
+    output test_no[4] // Used to identify which test case is being carried out
+  ) {
+/*A counter for us to change our test cases
+  It has 30 bits to give the circuit time to change cases
+  The case changes at a rate slightly faster then once per second
+  */
+  dff counter[30](.clk(clk), .rst(rst)); 
+  sig cases[4]; // Initialises signal cases to only take up to 4 bits, i.e. have 16 test cases
+  
+  faulty_adder8 add; // This imports the adder8 module for testing
+  
+  always {
+  done = 0;
+  out = 2;
+    
+  add.a = 8b0; // Initialising input a to adder to be 8 bits
+  add.b = 8b0; // Initialising input b to adder to be 8 bits
+  add.alufn = 1b0; // Initialising input alufn to adder to be 1 bit
+  
+  // Illustration of the uses of a,b and alufn will be done in Test case 1
+ 
+  cases = counter.q[29:26]; 
+  /* This allows the changing of the cases
+     by reading the 24th to 27th bit of the clk
+     which will be changing continuously.
+  */
+  counter.d = counter.q +1; // This will increment the last bit of the counter.q by 1 every clk tick, allowing case to change
+    case(cases){
+    
+      /*
+      Documentation for what add.a , add.b , add.alufn will only be done for Test 1, 
+      subsequent test cases assumes prior knowledge of their operation 
+      */
+      
+      4b0000:  
+      /*
+      Test 1
+      Checks the operation -8 + (-94) = -102
+           where -102 is 10100010 in 2's Compliment
+        */
+        add.a = 8b11111000;
+        // This sets the input a for the adder module being tested
+        add.b = 8b10100010;
+        // This sets the input b for the adder module being tested
+        add.alufn = 1b0; 
+        /* 
+           This sets the alufn input into the adder to decide it's operation
+           In this case it is set to addition
+           If alufn is set to 1, operation is set to subtraction
+        */
+        out = (add.out == 8b10011010); // Checking if output from adder8 is correct
+        test_no = 4b0000;
+      4b0001:
+      /*
+      Test 2
+      Checks the operation 5 - 45 = -40
+           where -40 is 11011000 in 2's Compliment
+        */
+        add.a = 8b00000101;
+        add.b = 8b00101101;
+        add.alufn = 1b1;
+        out = (add.out == 8b11011000);
+        test_no = 4b0001;
+      4b0010:
+      /*
+      Test 2
+      Checks the operation 51 + 2 = 53
+           where 53 is 00110101 in 2's Compliment
+        */
+        add.a = 8b00110011;
+        add.b = 8b00000010;
+        add.alufn = 1b0;
+        out = (add.out == 8b00110101);
+        test_no = 4b0010;
+      4b0011:
+      /*
+      Test 4
+      Checks the operation -46 - (-57) = 11
+           where 11 is 00001011 in 2's Compliment
+        */
+        add.a = 8b11010010;
+        add.b = 8b11000111;
+        add.alufn = 1b1;
+        out = (add.out == 8b00001011);
+        test_no = 4b0011;
+      4b0100:
+      /*
+      Test 5
+      Checks the operation -47 + 73 = 26
+           where 26 is 00011010 in 2's Compliment
+        */
+        add.a = 8b11010001;
+        add.b = 8b01001001;
+        add.alufn = 1b0;
+        out = (add.out == 8b00011010);
+        test_no = 4b0100;
+      4b0101:
+      /*
+      Test 6
+      Checks the operation 127 + 127 = 254
+      However, this operation will result in an overflow, as 254 
+      cannot be represented in 2's Compliment with 8 bits
+      Therefore, Result obtained should be Arithmetically wrong,
+      but ALU should still produce 11111110 as a result of only taking the
+      right-most 8 bits when computing this calculation by hand
+        */
+        add.a = 8b01111111;
+        add.b = 8b01111111;
+        add.alufn = 1b0;
+        out = (add.out == 8b11111110);
+        test_no = 4b0101;  
+      4b0110:
+      /*
+      Test 7
+      Checks the operation -1 + (-1) = -2
+           where -2 is 11111110 in 2's Compliment
+        */
+        add.a = 8b11111111;
+        add.b = 8b11111111;
+        add.alufn = 1b0;
+        out = (add.out == 8b11111110);
+        test_no = 4b0110;
+      4b0111:
+      /*
+      Test 8
+      Checks the operation 0 - 0 = 0
+           where 0 is 00000000 in 2's Compliment
+        */
+        add.a = 8b00000000;
+        add.b = 8b00000000;
+        add.alufn = 1b1;
+        out = (add.out == 8b00000000);
+        test_no = 4b0111;
+      4b1000:
+      /*
+      Test 9
+      Checks the operation -128 - (-128) = -256
+      However, this operation will result in an overflow, as -256 
+      cannot be represented in 2's Compliment with 8 bits
+      Therefore, Result obtained should be Arithmetically wrong,
+      but ALU should still produce 00000000 as a result of only taking the
+      right-most 8 bits when computing this calculation by hand
+        */
+        add.a = 8b10000000;
+        add.b = 8b10000000;
+        add.alufn = 1b1;
+        out = (add.out == 8b00000000);
+        test_no = 4b1000;
+      4b1001:
+        done = 1;
+        out = 2;
+        test_no = 4b1001;
+      default:
+        out = 2;
+        test_no = 0;      
+    }
+  }
+}
