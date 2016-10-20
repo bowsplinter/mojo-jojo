@@ -40,6 +40,12 @@ module alu8 (
     shift.alufn = alufn[1:0];
     
     case(alufn[5:4]) {
+    
+    /*
+      Using the inputs of the alufn,
+      we can decide the operation to be performed 
+      by choosing the right module.
+    */
       2b00: // adder
         if (alufn[1]) {
           out = mul.out;
