@@ -9,6 +9,7 @@
     <src>tester.luc</src>
     <src>boole8.luc</src>
     <src top="true">mojo_top.luc</src>
+    <src>test_boole8.luc</src>
     <src>test_adder8.luc</src>
     <src>finitestatemachine.luc</src>
     <ucf lib="true">io_shield.ucf</ucf>

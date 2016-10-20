@@ -1,3 +1,8 @@
+/*
+Boole8 module is a 8-bit Boolean Unit
+   
+*/
+
 module boole8 (
     input a[8],
     input b[8],

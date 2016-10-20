@@ -19,7 +19,7 @@ module test_adder8 (
   cases = counter.q[27:24];
   counter.d = counter.q +1;
     case(cases){
-      4b0000:
+      4b0000: // Test 1
         add.a = 8b11111000;
         add.b = 8b10100010;
         add.alufn = 1b0;
@@ -54,13 +54,15 @@ module test_adder8 (
         add.b = 8b01111111;
         add.alufn = 1b0;
         out = (add.out == 8b11111110);
-        test_no = 4b0101;  
+        test_no = 4b0101;
+        out = (add.out == 8b11111110);  
       4b0110:
         add.a = 8b11111111;
         add.b = 8b11111111;
         add.alufn = 1b0;
         out = (add.out == 8b11111110);
         test_no = 4b0110;
+        out = (add.out == 8b00000000);
       4b0111:
         add.a = 8b00000000;
         add.b = 8b00000000;
