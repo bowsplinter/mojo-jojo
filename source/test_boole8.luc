@@ -1,10 +1,14 @@
 module test_boole8 (
     input clk,  // clock
     input rst,  // reset
-    output out
+    output out,
+    output done,
+    output test_no
   ) {
 
   always {
+    done = 0;
+    test_no = 0;
     out = 0;
   }
 }

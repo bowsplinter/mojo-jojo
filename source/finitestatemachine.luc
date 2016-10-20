@@ -16,8 +16,11 @@ module finitestatemachine (
       
       switch btnUp;
       switch btnCen;
+      switch btnDown;
+      switch btnLeft;
+      switch btnRight;
       
-      fsm state(#INIT(IDLE)) = {IDLE, ADD, BOOL, CMP, SHIFT, DONE};     
+      fsm state(#INIT(IDLE)) = {IDLE, ADD, BOOL, CMP, SHIFT, FAULTY};     
     }
 }
   
@@ -25,7 +28,10 @@ module finitestatemachine (
   
     btnUp.toggle = io_button[0];
     btnCen.toggle = io_button[1];
-    
+    btnDown.toggle = io_button[2];
+    btnLeft.toggle = io_button[3];
+    btnRight.toggle = io_button[4];
+        
     state.d = state.q;
     io_led = 3x{{8h00}};
     out = 2;
@@ -33,13 +39,22 @@ module finitestatemachine (
     case (state.q) {
       state.IDLE:
         out = 2;
-        if (btnUp.out == 1) {
-          io_led[0][0] = 1;
+        if (btnUp.out) {
           state.d = state.ADD;
         }
-        if (btnCen.out == 1) {
+        if (btnCen.out) {
           state.d = state.CMP;
         }
+        if (btnDown.out) {
+          state.d = state.SHIFT;
+        }
+        if (btnLeft.out) {
+          state.d = state.BOOL;
+        }
+        if (btnRight.out) {
+          state.d = state.FAULTY;
+        }
+        
       state.ADD:
         out = test_add.out;
         test_no = test_add.test_no;
@@ -52,6 +67,20 @@ module finitestatemachine (
         test_no = test_cmp.test_no;
         io_led[0][2] = 1;
         if (test_cmp.done == 1) {
+          state.d = state.IDLE;
+        }
+      state.SHIFT:
+        out = test_shift.out;
+        test_no = test_shift.test_no;
+        io_led[0][3] = 1;
+        if (test_shift.done) {
+          state.d = state.IDLE;
+        }
+      state.BOOL:
+        out = test_bool.out;
+        test_no = test_bool.test_no;
+        io_led[0][4] = 1;
+        if (test_bool.done) {
           state.d = state.IDLE;
         }
     }
