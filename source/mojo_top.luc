@@ -54,10 +54,10 @@ module mojo_top (
  
     statemachine.io_button = io_button;
     if (statemachine.out == 1) {
-      io_led[1] = 1;
+      io_led[1][0] = 1;
     }
     else if (statemachine.out == 0){
-      io_led[2] = 1;
+      io_led[1][1] = 1;
     }
     io_led[0][7:2] = statemachine.test_no;
     io_led[0][0] = statemachine.io_led[0][0];

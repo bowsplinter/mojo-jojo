@@ -1,7 +1,9 @@
 module test_compare8 (
     input clk,  // clock
     input rst,  // reset
-    output out
+    output out,
+    output done,
+    output test_no
   ) {
   
   dff counter[27](.clk(clk),.rst(rst));
@@ -12,9 +14,10 @@ module test_compare8 (
   
   
   always {
+  done = 0;
   add.a = 8b0;
   add.b = 8b0;
-  add.alufn = 1b0;
+  add.alufn = 1b1;
   
   compare.z = add.z;
   compare.v = add.v;
@@ -33,30 +36,37 @@ module test_compare8 (
         add.b = 8b00000001; // b = 1
         compare.alufn = 2b01;
         out = (compare.out == 8b00000001); //showing 1 cause we definded them to be the same
-        
+        test_no = 3b000;
       //testing a < b when ALUFN is 10  
       3b001:
         add.a = 8b00000001;
         add.b = 8b00000011;
         compare.alufn = 2b10;
         out = (compare.out == 8b00000001); //shows 1 cause we defined A > B)
-        
+        test_no = 3b001;
       //testing a >= b when ALUFN is 11 
       3b010:
         add.a = 8b00000001;
         add.b = 8b00000011;
         compare.alufn = 2b11;
         out = (compare.out == 8b00000001);
-        
+        test_no = 3b010;
       //making A = B when ALUFN is 11
-      3b100:
+      3b011:
         add.a = 8b00000001;
         add.b = 8b00000001;
         compare.alufn = 2b11;
         out = (compare.out == 8b00000001);
+        test_no = 3b011;
+      3b100:
+        done = 1;
+        out = 0;
+        test_no = 3b100;
         
       default:
-        out  = 0;  
+        done = 0;
+        out  = 0; 
+        test_no = 0; 
     }
         
        
