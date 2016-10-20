@@ -1,10 +1,93 @@
-module test_boole8 (
+module test_booole8 (
     input clk,  // clock
     input rst,  // reset
     output out
   ) {
+  
+/*A counter for us to change our test cases
+  It has 28 bits to give the circuit time to change cases
+  The case changes at a rate slightly faster then once per second
+  */
+  dff counter[30](.clk(clk), .rst(rst));
+  sig cases[4]; // Initialises signal cases to only take up to 4 bits, i.e. have 16 test cases
+  
+  boole8 boole; // This imports the boole8 module for testing
 
   always {
-    out = 0;
-  }
+    boole.a = 8b0; // Initialising input a to boole to be 8 bits
+    boole.b = 8b0; // Initialising input b to boole to be 8 bits
+    cases = counter.q[27:24]; 
+    boole.alufn = cases;
+    counter.d = counter.q +1;
+      case(cases){
+        4b0000:
+           boole.a = 8b00110111;
+           boole.b = 8b10110101;
+           out = (boole.out == 8b0000000);
+        4b0001:
+           boole.a = 8b11110001;
+           boole.b = 8b00001001;
+           out = (boole.out == 8b00000111);
+        4b0010:
+           boole.a = 8b11011100;
+           boole.b = 8b10011011;
+           out = (boole.out == 8b01000100);
+        4b0011:
+           boole.a = 8b00110111;
+           boole.b = 8b01101010;
+           out = (boole.out == 8b10010101);
+        4b0100:
+           boole.a = 8b00110100;
+           boole.b = 8b00011001;
+           out = (boole.out == 8b00001001);
+        4b0101: // NOT A
+           boole.a = 8b11010111;
+           boole.b = 8b01111101;
+           out = (boole.out == 8b00101000);
+        4b0110: // XOR
+           boole.a = 8b10110101;
+           boole.b = 8b10111101;
+           out = (boole.out == 8b00001000);
+        4b0111: // NAND
+           boole.a = 8b11111010;
+           boole.b = 8b11011010;
+           out = (boole.out == 8b00100101);
+        4b1000: // AND
+           boole.a = 8b11010010;
+           boole.b = 8b10011001;
+           out = (boole.out == 8b10010000);
+        4b1001: // XNOR
+           boole.a = 8b01101101;
+           boole.b = 8b01100011;
+           out = (boole.out == 8b11110001);
+        4b1010: // A
+           boole.a = 8b00011111;
+           boole.b = 8b11111100;
+           out = (boole.out == 8b00011111);
+        4b1011: // A <= B, not (A=0, B=1)
+           boole.a = 8b11100101;
+           boole.b = 8b10011010;
+           out = (boole.out == 8b10011010);
+        4b1100: // B
+           boole.a = 8b01010010;
+           boole.b = 8b10100101;
+           out = (boole.out == 8b10100101);
+        4b1101: // B <= A, not (A=1, B=0)
+           boole.a = 8b01110110;
+           boole.b = 8b01111110;
+           out = (boole.out == 8b11110111);
+        4b1110: // OR
+           boole.a = 8b00001000;
+           boole.b = 8b01001001;
+           out = (boole.out == 8b01000001);
+        4b1111: // ONE
+           boole.a = 8b11001011;
+           boole.b = 8b00110010;
+           out = (boole.out == 8b11111111);
+           
+      
+        default:
+          out = 0;
+      }
+   }
 }
