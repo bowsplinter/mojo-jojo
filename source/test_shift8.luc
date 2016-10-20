@@ -1,0 +1,43 @@
+module test_shift8 (
+    input clk,  // clock
+    input rst,  // reset
+    output out
+  ) {
+  
+  dff counter[28](.clk(clk), .rst(rst));
+  sig cases[4];
+  
+  shift8 shift;
+  
+  always {
+  shift.a = 8b00000001;
+  shift.b = 8b00000011; //default shifting of 3 places
+  shift.alufn = 2b00;
+    
+      
+  cases = counter.q[27:24];
+  counter.d = counter.q + 1;
+    
+    case (cases) {
+      //shifting left by 3 places when A is 1
+      4b0001:
+        shift.a = 8b00000001;
+        shift.alufn = 2b00;
+        out = (shift.out == 8b00001000);
+        
+      //shifting right by 3 places when A is 16
+      4b0011:
+        shift.a = 8b00010000;
+        shift.alufn = 2b01;
+        out = (shift.out == 8b00000010);
+      //shifting right by 3 places with sign conservation
+      4b0111:
+        shift.a = 8b11000000;
+        shift.alufn = 2b11;
+        out = (shift.out == 8b11111000);
+        
+      default:
+        out = 0;
+    }
+  }
+}
