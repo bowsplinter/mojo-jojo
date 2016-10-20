@@ -1,0 +1,49 @@
+module finitestatemachine (
+    input clk,  // clock
+    input rst,  // reset
+    input io_button[5],
+    output out,
+    output test_no,
+    output io_led[3][8]
+  ) {
+
+  .clk(clk) {
+    .rst(rst) {
+      test_adder8 test_add;
+      test_boole8 test_bool;
+      test_compare8 test_cmp;
+      test_shift8 test_shift;
+      
+      switch btnUp;
+      
+      fsm state(#INIT(IDLE)) = {IDLE, ADD, BOOL, CMP, SHIFT, DONE};     
+    }
+}
+  
+  always {
+  
+    btnUp.toggle = io_button[0];
+    
+    state.d = state.q;
+    io_led = 3x{{8h00}};
+    out = 2;
+    test_no = 0;
+    case (state.q) {
+      state.IDLE:
+        out = 2;
+        if (btnUp.out == 1) {
+          io_led[0][0] = 1;
+          state.d = state.ADD;
+        }
+      state.ADD:
+        out = test_add.out;
+        test_no = test_add.test_no;
+        io_led[0][1]=1;
+        if (test_add.done == 1) {
+          state.d = state.IDLE;
+        }
+      state.CMP:
+        out = test_cmp.out;
+    }
+  }
+}
