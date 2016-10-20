@@ -12,8 +12,8 @@
     <src>adder8.luc</src>
     <src>test_shift8.luc</src>
     <src>seven_seg.luc</src>
-    <src>test_adder8.luc</src>
     <src>test_boole8.luc</src>
+    <src>test_adder8.luc</src>
     <src>test_compare8.luc</src>
     <src>finitestatemachine.luc</src>
     <ucf lib="true">io_shield.ucf</ucf>

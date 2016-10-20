@@ -3,10 +3,10 @@ module test_shift8 (
     input rst,  // reset
     output out,
     output done,
-    output test_no
+    output test_no[4]
   ) {
   
-  dff counter[28](.clk(clk), .rst(rst));
+  dff counter[30](.clk(clk), .rst(rst));
   sig cases[4];
   
   shift8 shift;
@@ -17,8 +17,9 @@ module test_shift8 (
   shift.alufn = 2b00;
   
   done = 0;
+  out = 2;
       
-  cases = counter.q[27:24];
+  cases = counter.q[29:26];
   counter.d = counter.q + 1;
     
     case (cases) {
@@ -44,10 +45,8 @@ module test_shift8 (
         out = 0;
         done = 1;
         test_no = 4b0011;
-        
       default:
-        out = 0;
-        done = 0;
+        out = 2;
         test_no = 0;
     }
   }

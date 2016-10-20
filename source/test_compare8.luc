@@ -3,10 +3,10 @@ module test_compare8 (
     input rst,  // reset
     output out,
     output done,
-    output test_no
+    output test_no[4]
   ) {
   
-  dff counter[27](.clk(clk),.rst(rst));
+  dff counter[30](.clk(clk),.rst(rst));
   sig cases[3];
   
   adder8 add;
@@ -15,6 +15,7 @@ module test_compare8 (
   
   always {
   done = 0;
+  out = 2;
   add.a = 8b0;
   add.b = 8b0;
   add.alufn = 1b1;
@@ -26,7 +27,7 @@ module test_compare8 (
   
   
  
-  cases = counter.q[26:24];
+  cases = counter.q[28:26];
   counter.d = counter.q + 1;
     
     case(cases) {
@@ -60,12 +61,10 @@ module test_compare8 (
         test_no = 3b011;
       3b100:
         done = 1;
-        out = 0;
+        out = 2;
         test_no = 3b100;
-        
       default:
-        done = 0;
-        out  = 0; 
+        out  = 2; 
         test_no = 0; 
     }
         
