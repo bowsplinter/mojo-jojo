@@ -36,7 +36,7 @@ module test_compare8 (
         add.a = 8b00000001; // a = 1
         add.b = 8b00000001; // b = 1
         compare.alufn = 2b01;
-        out = (compare.out == 8b00000001); //showing 1 cause we definded them to be the same
+        out = (compare.out == 8b00000001); //showing 1 cause we defined them to be the same
         test_no = 3b000;
       //testing a < b when ALUFN is 10  
       3b001:
