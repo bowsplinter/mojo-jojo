@@ -5,11 +5,13 @@ module test_adder8 (
     output done, // Used to determine if testing has been completed
     output test_no[4] // Used to identify which test case is being carried out
   ) {
-/*A counter for us to change our test cases
+
+  dff counter[30](.clk(clk), .rst(rst));
+  /*
+  A counter for us to change our test cases
   It has 30 bits to give the circuit time to change cases
   The case changes at a rate slightly faster then once per second
-  */
-  dff counter[30](.clk(clk), .rst(rst)); 
+  */ 
   sig cases[4]; // Initialises signal cases to only take up to 4 bits, i.e. have 16 test cases
   
   adder8 add; // This imports the adder8 module for testing
@@ -26,7 +28,7 @@ module test_adder8 (
  
   cases = counter.q[29:26]; 
   /* This allows the changing of the cases
-     by reading the 24th to 27th bit of the clk
+     by reading the 26th to 29th bit of the clk
      which will be changing continuously.
   */
   counter.d = counter.q +1; // This will increment the last bit of the counter.q by 1 every clk tick, allowing case to change
@@ -152,11 +154,11 @@ module test_adder8 (
         out = (add.out == 8b00000000);
         test_no = 4b1000;
       4b1001:
-        done = 1;
+        done = 1; // Indicates that all test cases have been completed
         out = 2;
         test_no = 4b1001;
       default:
-        out = 2;
+        out = 2; // This is the default case where the output is wrong given that there are no cases to test 
         test_no = 0;      
     }
   }
